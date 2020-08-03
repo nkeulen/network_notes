@@ -228,3 +228,48 @@ COMMIT
 </rpc>
 ##
 
+
+
+
+
+
+
+
+<!--
+
+    RETRIEVING YANG MODELS FROM A NETCONF DEVICE    
+
+-->    
+
+<!-- LIST MODELS ON DEVICE (AND THEIR IDENTIFIERS) -->
+#262
+<rpc message-id="15648" xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
+  <get>
+    <filter type="subtree">
+      <netconf-state xmlns="urn:ietf:params:xml:ns:yang:ietf-netconf-monitoring">
+        <schemas/>
+      </netconf-state>
+    </filter>
+  </get>
+</rpc>
+##
+
+
+<!-- RETRIEVE A SPECIFIC YANG MODEL FROM THE DEVICE -->
+#210
+<rpc message-id="961" xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
+ <get-schema xmlns="urn:ietf:params:xml:ns:yang:ietf-netconf-monitoring">
+   <identifier>openconfig-mpls</identifier>
+ </get-schema>
+</rpc>
+##
+
+
+<!-- CLOSE SESSION -->
+#98
+<rpc message-id="101" xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
+    <close-session/>
+</rpc>
+##
+
+
