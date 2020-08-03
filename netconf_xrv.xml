@@ -1,0 +1,230 @@
+<!-- 
+========================================================================
+    Tested on XRv instance running IOS-XR version 6.1.3    
+
+    Connect to instance using: ssh username@xrv_host -p 830 -s netconf
+========================================================================    
+-->
+
+
+<!--
+==================
+SEND HELLO MESSAGE
+==================
+Send after receiving hello from router with its capabilities.
+
+After sending hello message press enter ONCE.
+All subsequent rpc calls seem to take TWO enters.
+
+The hello message ends in "]]>]]>" but the following RPC calls all have to start with # followed by the number of characters that will be send. The RPC calls end in ##
+-->
+<hello xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
+    <capabilities>
+        <capability>urn:ietf:params:netconf:base:1.0</capability>
+        <capability>urn:ietf:params:netconf:base:1.1</capability>
+    </capabilities>
+</hello>
+]]>]]>
+
+
+<!--
+====================================
+GET THE FULL RUNNING CONFIG
+====================================
+-->
+#175
+<rpc xmlns="urn:ietf:params:xml:ns:netconf:base:1.0" message-id="46549848">
+    <get-config>
+        <source>
+            <running/>
+        </source>
+    </get-config>
+</rpc>
+##
+
+
+<!--
+====================================
+CREATE LOOPBACK59 
+====================================
+Using Cisco (vendor specific) YANG model: Cisco-IOS-XR-ifmgr-cfg
+-->
+#500
+<rpc message-id="684" xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
+<edit-config>
+<target>
+<candidate/>
+</target>
+<config>
+        <interface-configurations xmlns="http://cisco.com/ns/yang/Cisco-IOS-XR-ifmgr-cfg">
+           <interface-configuration>
+            <active>act</active>
+            <interface-name>Loopback59</interface-name>
+            <interface-virtual></interface-virtual>
+           </interface-configuration>
+        </interface-configurations>
+</config>
+</edit-config>
+</rpc>
+##
+
+
+<!--
+====================================
+COMMIT
+====================================
+-->
+#87
+<rpc message-id="101" xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
+<commit/>
+</rpc>
+##
+
+
+<!-- DELETE LOOPBACK59 -->
+#623
+<rpc message-id="112231891" xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
+<edit-config>
+<target>
+<candidate/>
+</target>
+<default-operation>none</default-operation>
+<config xmlns:xc="urn:ietf:params:xml:ns:netconf:base:1.0">
+        <interface-configurations xmlns="http://cisco.com/ns/yang/Cisco-IOS-XR-ifmgr-cfg">
+           <interface-configuration xc:operation="delete">
+            <active>act</active>
+            <interface-name>Loopback59</interface-name>
+            <interface-virtual></interface-virtual>
+           </interface-configuration>
+        </interface-configurations>
+</config>
+</edit-config>
+</rpc>
+##
+
+
+<!-- COMMIT AGAIN -->
+#87
+<rpc message-id="101" xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
+<commit/>
+</rpc>
+##
+
+
+<!-- OPENCONFIG - CREATE LOOPBACK101 WITH DESCRIPTION AND IP ADDR  -->
+#1434
+<rpc message-id="61984381" xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
+    <edit-config>
+        <target>
+            <candidate/>
+        </target>
+        <config>
+            <interfaces xmlns="http://openconfig.net/yang/interfaces">
+                <interface>
+                    <name>Loopback101</name>
+                    <config>
+                        <name>Loopback101</name>
+                        <type xmlns:idx="urn:ietf:params:xml:ns:yang:iana-if-type">idx:softwareLoopback</type>
+                        <enabled>true</enabled>
+                        <description>GREETINGS FROM NETCONF!</description>
+                    </config>
+                    <subinterfaces>
+                        <subinterface>
+                            <index>0</index>
+                            <ipv4 xmlns="http://openconfig.net/yang/interfaces/ip">
+                                <address>
+                                    <ip>10.2.3.4</ip>
+                                    <config>
+                                        <ip>10.2.3.4</ip>
+                                        <prefix-length>32</prefix-length>
+                                    </config>
+                                </address>
+                            </ipv4>
+                        </subinterface>
+                    </subinterfaces>
+                </interface>
+            </interfaces>
+        </config>
+    </edit-config>
+</rpc>
+##
+
+<!-- COMMIT AGAIN -->
+#90
+<rpc message-id="838383" xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
+<commit/>
+</rpc>
+##
+
+
+
+<!-- OPENCONFIG - CHANGE DESCRIPTION ON LOOPBACK101  -->
+#684
+<rpc message-id="12345678" xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
+    <edit-config>
+        <target>
+            <candidate/>
+        </target>
+        <config xmlns:xc="urn:ietf:params:xml:ns:netconf:base:1.0">
+            <interfaces xmlns="http://openconfig.net/yang/interfaces">
+                <interface xc:operation="replace">
+                    <name>Loopback101</name>
+                    <config>
+                        <name>Loopback101</name>
+                        <description>HELLO FROM NETCONF!</description>
+                    </config>                  
+                </interface>
+            </interfaces>
+        </config>
+    </edit-config>
+</rpc>
+##
+
+
+<!-- COMMIT AGAIN -->
+#90
+<rpc message-id="999999" xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
+<commit/>
+</rpc>
+##
+
+
+
+<!-- OPENCONFIG - DELETE LOOPBACK101  -->
+#646
+<rpc message-id="13919734" xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
+    <edit-config>
+        <target>
+            <candidate/>
+        </target>
+        <default-operation>none</default-operation>
+        <config xmlns:xc="urn:ietf:params:xml:ns:netconf:base:1.0">
+            <interfaces xmlns="http://openconfig.net/yang/interfaces">
+                <interface xc:operation="delete">
+                    <name>Loopback101</name>
+                    <config>
+                        <name>Loopback101</name>
+                    </config>
+                </interface>
+            </interfaces>
+        </config>
+    </edit-config>
+</rpc>
+##
+
+
+<!-- COMMIT AGAIN -->
+#95
+<rpc message-id="19875354984" xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
+<commit/>
+</rpc>
+##
+
+
+<!-- CLOSE SESSION -->
+#98
+<rpc message-id="101" xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
+    <close-session/>
+</rpc>
+##
+
